@@ -1,38 +1,37 @@
 from util.ply_parser import parse_ply_file
 from .line_segment import LineSegment
-from model.point import Point
-from evaluators.frechet import FrechetLineSegmentEvaluator
-import json
+from evaluators.interfaces import LineSegmentEvaluator
+from model.serializer import Serializer
 
 
 class Grader:
-    def __init__(self, solution_path: str):
-        self.path = solution_path
-        self.point_indices: list[int] = []
-        self.solution: list = []
-        self.get_indices_from_solution()
+    def __init__(self, evaluator_type: LineSegmentEvaluator) -> None:
+        self.evalutor = evaluator_type
+        self.aggregate_distances()
+        pass
 
-    def get_indices_from_solution(self):
-        with open(self.path, 'r') as file:
-            self.solution = json.load(file)
-            for item in self.solution:
-                if 'index' in item:
-                    self.point_indices.append(item['index'])
-                else:
-                    print(f"Item missing index: {item}")
+    def get_distance_ideal_line(self, ideal: LineSegment, actual: LineSegment):
+        return self.evalutor.distance_from_ideal(ideal, actual)
 
-    def get_points_from_file_path(self, file_path: str) -> list[Point]:
-        points: list[Point] = []
-        if file_path:
-            pc = parse_ply_file(file_path=file_path)
-            for indices in self.point_indices:
-                points.append(pc[indices])
-        return points
+    def aggregate_distances(self):
+        submission = Serializer(
+            './data/solutions.json').get_line_segments()
+        ideal_solutions = Serializer(
+            './data/ideal_solutions.json').get_line_segments()
+        all_distances = []
 
-    def get_ideal(self, file_path: str) -> LineSegment:
-        points = self.get_points_from_file_path(file_path=file_path)
-        return LineSegment(points=points)
+        for attr, value in enumerate(submission.items()):
+            file_name = value[0]
+            submission_line_seg = value[1]
+            ideal_solution_line_seg = ideal_solutions[file_name]
+            for ideal_line in ideal_solution_line_seg:
+                matched_lines = []
+                for submission_line in submission_line_seg:
+                    distance = self.get_distance_ideal_line(
+                        ideal_line, submission_line)
+                    matched_lines.append(distance)
+                all_distances.append(min(matched_lines))
 
-    def calculate_distance_from_ideal_to_actual(self, ideal: LineSegment,  actual: LineSegment):
-        frechet = FrechetLineSegmentEvaluator()
-        return frechet.distance_from_ideal(ideal, actual)
+        print(all_distances)
+        print(len(all_distances))
+        print(sum(all_distances))
