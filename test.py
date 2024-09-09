@@ -44,15 +44,15 @@ lines = [
     ])
 ]
 
-solution = Solution('roundabout.ply', lines).line_segment_to_json()
+s = Solution('solutions.json')
+s.add_solution('90_degree_turn.ply', lines)
+s.add_solution('bendy.ply', [lines[2]])
+s.to_json()
 
-
-# blended = Solution(
-#     'blended.ply', line_segment=line[1])
-
-# print(blended)
-
-# subs = Submissions([solution, blended])
 
 frachet = FrechetLineSegmentEvaluator()
-subs = Grader(frachet)
+grader = Grader(frachet)
+
+solution = grader.load_json('./data/solutions.json')
+ideal_solution = grader.load_json('./data/ideal_solutions.json')
+grader.aggregate_distances(ideal_solutions=ideal_solution, solutions=solution)
