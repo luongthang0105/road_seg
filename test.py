@@ -44,7 +44,7 @@ lines = [
     ])
 ]
 
-solution = Solution('roundabout.ply', lines)
+solution = Solution('roundabout.ply', lines).line_segment_to_json()
 
 
 # blended = Solution(

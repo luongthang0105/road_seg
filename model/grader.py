@@ -7,17 +7,18 @@ from model.serializer import Serializer
 class Grader:
     def __init__(self, evaluator_type: LineSegmentEvaluator) -> None:
         self.evalutor = evaluator_type
-        self.aggregate_distances()
+        self.aggregate_distances(
+            './data/solutions.json', './data/ideal_solutions.json')
         pass
 
     def get_distance_ideal_line(self, ideal: LineSegment, actual: LineSegment):
         return self.evalutor.distance_from_ideal(ideal, actual)
 
-    def aggregate_distances(self):
+    def aggregate_distances(self, submission_file_path, ideal_soultion_file_path):
         submission = Serializer(
-            './data/solutions.json').get_line_segments()
+            submission_file_path).get_line_segments_from_json()
         ideal_solutions = Serializer(
-            './data/ideal_solutions.json').get_line_segments()
+            ideal_soultion_file_path).get_line_segments_from_json()
         all_distances = []
 
         for attr, value in enumerate(submission.items()):
@@ -31,7 +32,4 @@ class Grader:
                         ideal_line, submission_line)
                     matched_lines.append(distance)
                 all_distances.append(min(matched_lines))
-
-        print(all_distances)
-        print(len(all_distances))
-        print(sum(all_distances))
+        return sum(all_distances)
