@@ -1,13 +1,14 @@
 # Road segmentation/classification challenge
 Given a set of point cloud, identify the roads and draw an ideal line segment. The closer the segment is to running through the middle of the road, the better the score.
 
-## TODOs
+## What you will get out of this challenge
+- A better understanding of the challenges of road segmentation in point clouds and working with 3D data
+- Exposure to a variety of algorithms for point cloud processing
+- Experience with popular libraries such as Open3D and NumPy
+- Making trade offs and choosing algorithms based on the problem at hand
+- Learning about the importance of data, features, collaboration and optimization
 
-[ ] more details here on scoring, where to implement and example data.
-[ ] maybe convert to a similarity score instead of a distance
-[ ] visually display ideal and actual segments and their scores
-[ ] automated evaluator
-
+The goal isn't to get a perfect score, but to get a feel for the challenges and trade offs involved and to critically think about the different approaches to solving the problem.
 
 Example cases you may need to solve for:
 
@@ -17,12 +18,46 @@ Example cases you may need to solve for:
 
 ![elevation](./images/elevation.png)
 
+A Google drive location will be provided on the day of the challenge. Come up with a team name and submit your solution as `team_name.zip`. It should include a `solution.md` on: 
+
+- a link to your forked repository
+- algorithms you tried and why you chose the one you did and the pros and cons of the algorithms
+- how you tuned your hyperparameters, if any
+- trade offs you made
+- what you would do if you had more time, data, compute power (be specific)
+
+It should also include json file of your solution that was generated with the `Solution` class found in `model/solution.py`. 
+
+To create a Solution, instantiate the `Solution()` class.
+Then for each problem you solve in `/data`, add it to your set of solutions with the `add_solution()` method. 
+
+Make sure the problem name matches the filename in the data folder. For each problem, there should be an array of `LineSegment`s that you have classified as roads. 
+
+Example usage:
+```python
+basic_lines: list[LineSegment] = solve(...) # returns a list of LineSegments
+bendy_lines: list[LineSegment] = solve(...)
+
+solution = Solution(output_file="solutions.json")
+solution.add_solution(name="basic.ply", lines=basic_lines)
+solution.add_solution(name="bendy.ply", lines=bendy_lines)
+solution.to_json() # generates solutions.json for submission
+```
+
+## TODOs
+- [x] point cloud reader util
+- [x] point cloud reduction util
+- [ ] more details here on scoring, where to implement and example data.
+- [ ] maybe convert to a similarity score instead of a distance
+- [ ] visually display ideal and actual segments and their scores
+- [ ] automated evaluator
 
 ## Requirements
 - Python ~3.10
 - [Poetry](https://python-poetry.org/)
 - [Git LFS](https://git-lfs.com/)
-- Tested on Intel and ARM based Macs.
+- Tested on Intel and ARM based Macs
+- 32GB+ of RAM highly recommended. You could get away with 16GB but you'll have to be stricter with your algorithms
 
 Set poetry configs:
 ```bash
@@ -54,9 +89,10 @@ poetry run pytest
 ```
 
 ## Directory layout
-`model` - Model entities. Contains a `Point` class that you can use in your logic. Check out its properties. 
-`snippets` - Little helpful code snippets if you want to run them individually to test stuff out, they're not part of the main app
-`util` - Various helper utilities. One creates a O3d point cloud and the other is for parsing the custom PLY file and its properties.
+- `model` - Model entities. Contains a `Point` class that you can use in your logic. Check out its properties. You'll also want the look at the `LineSegment` class as the main output.
+- `snippets` - Little helpful code snippets if you want to run them individually to test stuff out, they're not part of the main app
+- `util` - Various helper utilities. One creates a O3d point cloud and the other is for parsing the custom PLY file and its properties.
+- `evaluators` - Scoring logic for the challenge. There's a couple of types there so you can use it for optimizing your algorithms.
 
 ## Troubleshooting
 ### What the heck are the visualization controls?
