@@ -4,17 +4,13 @@ import json
 from model.ply import Ply
 file_path = "straight_road.ply"
 
-# Load point cloud
 pc = o3d.io.read_point_cloud(f"./data/{file_path}")
 
-# Initialize JSON response container with lines array
 response: Ply = {
     "indices": None,
     "lines": [],
     "ply": file_path
 }
-
-# Function to pick points and return them
 
 
 def pick_points(pc):
@@ -24,12 +20,10 @@ def pick_points(pc):
     print("Please pick points for a line using [shift + left click].")
     print("Press [shift + right click] to undo point picking.")
     print("Press 'N' to finish picking and save the current line.")
-    vis.run()  # user picks points
+    vis.run()
     vis.destroy_window()
     picked_indices = vis.get_picked_points()
     return picked_indices
-
-# Function to convert picked indices to point data
 
 
 def convert_indices_to_data(indices, pc):
