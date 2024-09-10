@@ -50,8 +50,8 @@ s.add_solution('bendy.ply', [lines[2]])
 s.to_json()
 
 
-frachet = FrechetLineSegmentEvaluator()
-grader = Grader(frachet)
+frechet = FrechetLineSegmentEvaluator()
+grader = Grader(frechet)
 
 solution = grader.load_json('./data/solutions.json')
 ideal_solution = grader.load_json('./data/ideal_solutions.json')

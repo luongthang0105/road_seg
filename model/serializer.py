@@ -51,7 +51,7 @@ class Serializer:
 
                 line_segment = LineSegment(points=all_points)
                 all_lines.append(line_segment)
-
-            ply_list.append({ply_object.ply: all_lines})
+            _line = {ply_object.ply: all_lines}
+            ply_list.append(_line)
 
         return ply_list
