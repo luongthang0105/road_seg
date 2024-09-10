@@ -44,7 +44,7 @@ lines = [
     ])
 ]
 
-s = Solution('solutions.json')
+s = Solution('./data/solutions.json')
 s.add_solution('90_degree_turn.ply', lines)
 s.add_solution('bendy.ply', [lines[2]])
 s.to_json()
@@ -55,4 +55,4 @@ grader = Grader(frachet)
 
 solution = grader.load_json('./data/solutions.json')
 ideal_solution = grader.load_json('./data/ideal_solutions.json')
-grader.aggregate_distances(ideal_solutions=ideal_solution, solutions=solution)
+grader.calculate_distances(ideal_solutions=ideal_solution, solutions=solution)

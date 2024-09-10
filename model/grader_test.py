@@ -1,10 +1,16 @@
 from model.grader import Grader
 from evaluators.frechet import FrechetLineSegmentEvaluator
+import pytest
 
 
-def test_aggregate_distances():
-    ideal = "./data/tests/ideal_solutions.json"
-    actual = "./data/tests/submissions.json"
+@pytest.fixture
+def grader():
     frachet = FrechetLineSegmentEvaluator()
-    accumalated_distance = Grader(
-        evaluator_type=frachet).aggregate_distances(ideal, actual)
+    return Grader(frachet)
+
+
+def test_load_json(grader):
+    ideal_lines = grader.load_json('./data/tests/ideal_solutions.json')
+    assert len(ideal_lines) == 1
+    assert len(ideal_lines[0]['lines']) == 4
+    assert ideal_lines[0]['ply'] == 'roundabout.ply'

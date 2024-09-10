@@ -28,21 +28,29 @@ class Serializer:
         It returns a dictionary with the file name. For example: {'basic.ply', list[LineSegment])}
         """
         ply_list = []
+
         for ply in ply_data:
             ply_object = Ply(**ply)
-            empty_lines = {ply_object.ply: [LineSegment([])]}
+            empty_lines = [{ply_object.ply: [LineSegment([])]}]
             all_lines = []
-            if ply_object.lines == None:
+
+            if ply_object.lines is None:
                 return empty_lines
+
             for line in ply_object.lines:
                 all_points = []
-                if line['points'] == None:
+
+                if line['points'] is None:
                     return empty_lines
+
                 for point in line['points']:
                     new_point = Point(x=point.get(
                         'x'), y=point.get('y'), z=point.get('z'))
                     all_points.append(new_point)
+
                 line_segment = LineSegment(points=all_points)
                 all_lines.append(line_segment)
+
             ply_list.append({ply['ply']: all_lines})
+
         return ply_list

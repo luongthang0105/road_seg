@@ -16,5 +16,5 @@ class Solution:
         self.solutions.append(self.serializer.to_json(lines, problem_name))
 
     def to_json(self) -> None:
-        with open(f'./data/{self.output_file}', 'w') as f:
+        with open(f'{self.output_file}', 'w') as f:
             json.dump(self.solutions, f)
