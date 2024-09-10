@@ -15,9 +15,12 @@ class Grader:
         return self.evalutor.distance_from_ideal(ideal, actual)
 
     def load_json(self, path: str):
-        with open(path, 'r') as f:
-            data = json.load(f)
-        return data
+        try:
+            with open(path, 'r') as f:
+                data = json.load(f)
+            return data
+        except Exception as e:
+            raise e
 
     def calculate_distances(self, ideal_solutions: dict, solutions: dict) -> None:
         serializer = Serializer()
