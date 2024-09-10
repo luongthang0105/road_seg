@@ -1,4 +1,3 @@
-from util.ply_parser import parse_ply_file
 from .line_segment import LineSegment
 from evaluators.interfaces import LineSegmentEvaluator
 from model.serializer import Serializer
