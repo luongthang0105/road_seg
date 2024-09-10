@@ -31,17 +31,18 @@ class Serializer:
 
         for ply in ply_data:
             ply_object = Ply(**ply)
-            empty_lines = [{ply_object.ply: [LineSegment([])]}]
+            empty_lines = [{ply_object.ply: []}]
+            empty_points = [{ply_object.ply: [LineSegment([])]}]
             all_lines = []
 
-            if ply_object.lines is None:
+            if ply_object.lines is None or len(ply_object.lines) == 0:
                 return empty_lines
 
             for line in ply_object.lines:
                 all_points = []
 
-                if line['points'] is None:
-                    return empty_lines
+                if line['points'] is None or len(line['points']) == 0:
+                    return empty_points
 
                 for point in line['points']:
                     new_point = Point(x=point.get(
@@ -51,6 +52,6 @@ class Serializer:
                 line_segment = LineSegment(points=all_points)
                 all_lines.append(line_segment)
 
-            ply_list.append({ply['ply']: all_lines})
+            ply_list.append({ply_object.ply: all_lines})
 
         return ply_list
