@@ -6,7 +6,7 @@ import pytest
 
 
 @pytest.fixture
-def ideal_lines():
+def ideal_lines() -> list[dict]:
     return [{"basic.ply": [LineSegment([
         Point(-2.8, 0.1, 0.16),
         Point(0.95, -0.12, 0.16),
@@ -18,7 +18,7 @@ def ideal_lines():
     ])]}]
 
 
-def test_load_json():
+def test_load_json() -> None:
     frechet = FrechetLineSegmentEvaluator()
     grader = Grader(frechet, "./data/tests/ideal_solutions.json",
                     "./data/tests/basic.json")
@@ -28,7 +28,7 @@ def test_load_json():
     assert ideal_lines[0]["ply"] == "roundabout.ply"
 
 
-def test_load_json_invalid_path():
+def test_load_json_invalid_path() -> None:
     frechet = FrechetLineSegmentEvaluator()
     grader = Grader(frechet, "./data/tests/ideal_solutions.json",
                     "./data/tests/basic.json")
@@ -37,7 +37,7 @@ def test_load_json_invalid_path():
     assert "No such file or directory" in str(exc_info.value)
 
 
-def test_find_solution_in_ideal(ideal_lines):
+def test_find_solution_in_ideal(ideal_lines) -> None:
     frechet = FrechetLineSegmentEvaluator()
     grader = Grader(frechet, "./data/tests/ideal_solutions.json",
                     "./data/tests/basic.json")
@@ -46,7 +46,7 @@ def test_find_solution_in_ideal(ideal_lines):
     assert type(lines) == list
 
 
-def test_find_solution_in_ideal_not_found(ideal_lines):
+def test_find_solution_in_ideal_not_found(ideal_lines) -> None:
     frechet = FrechetLineSegmentEvaluator()
     grader = Grader(frechet, "./data/tests/ideal_solutions.json",
                     "./data/tests/basic.json")

@@ -11,7 +11,7 @@ class Solution:
         self.serializer = Serializer()
         pass
 
-    def add_solution(self, problem_name: str, lines: list[LineSegment]):
+    def add_solution(self, problem_name: str, lines: list[LineSegment]) -> None:
         self.solutions.append(self.serializer.to_json(lines, problem_name))
 
     def to_json(self) -> None:

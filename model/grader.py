@@ -13,10 +13,10 @@ class Grader:
         solution_line_segments: list[dict[str, list[LineSegment]]] = serializer.to_line_segment(self._load_json(predicted_solution_path))
         self.calculate_distances(ideal_line_segments, solution_line_segments)
 
-    def _load_json(self, path: str):
+    def _load_json(self, path: str) -> list[dict]:
         try:
             with open(path, "r") as f:
-                data = json.load(f)
+                data: list[dict] = json.load(f)
             return data
         except Exception as e:
             raise e

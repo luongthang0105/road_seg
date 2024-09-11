@@ -17,7 +17,7 @@ class Serializer:
         pass
 
     def to_json(self, line_segments: list[LineSegment], problem_name: str) -> dict:
-        all_lines = []
+        all_lines: list[LineSegment] = []
         if line_segments and problem_name:
             for line in line_segments:
                 line_points = []
@@ -35,13 +35,13 @@ class Serializer:
         Convert all the line segments of JSON format and points in Ply class data.
         It returns a dictionary with the file name. For example: {"basic.ply", list[LineSegment])}
         """
-        solution_list = []
+        solution_list: list[dict[str, list[LineSegment]]] = []
 
         for solution in solutions:
             solution_object = Solution(**solution)
             empty_lines = [{solution_object.ply: []}]
             empty_points = [{solution_object.ply: [LineSegment([])]}]
-            all_lines = []
+            all_lines: list[LineSegment] = []
 
             if solution_object.lines is None or len(solution_object.lines) == 0:
                 return empty_lines
