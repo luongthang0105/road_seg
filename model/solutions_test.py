@@ -26,6 +26,9 @@ def test_add_solution_with_two_solution(solution) -> None:
     """
     1. The first line is a U shaped line provided in basic.ply
     2. The second line is a bendy line provided in bendy.ply
+
+    The function only verifies if the list is mantained. 
+    All the solutions are being added solutions list by checking its length
     """
     solution.add_solution("basic.ply", [LineSegment([
         Point(-2.9, -0.67, 0.16),
