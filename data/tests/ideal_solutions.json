@@ -1,6 +1,5 @@
 [
   {
-    "indices": null,
     "lines": [
       {
         "points": [
@@ -53,7 +52,8 @@
             "y": 4.4,
             "z": 0.16
           }
-        ]
+        ],
+        "line_indices": []
       },
       {
         "points": [
@@ -106,7 +106,8 @@
             "y": 5.3,
             "z": 0.16
           }
-        ]
+        ],
+        "line_indices": []
       },
       {
         "points": [
@@ -159,7 +160,8 @@
             "y": 5.3,
             "z": 0.16
           }
-        ]
+        ],
+        "line_indices": []
       },
       {
         "points": [
@@ -212,7 +214,8 @@
             "y": 5.3,
             "z": 0.16
           }
-        ]
+        ],
+        "line_indices": []
       }
     ],
     "ply": "roundabout.ply"

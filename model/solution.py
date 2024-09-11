@@ -1,6 +1,5 @@
 from model.line_segment import LineSegment
 from model.serializer import Serializer
-from model.ply import Ply
 import json
 
 

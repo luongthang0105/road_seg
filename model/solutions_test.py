@@ -1,4 +1,4 @@
-from model.solutions import Solution
+from model.solution import Solution
 from model.line_segment import LineSegment
 from model.point import Point
 import pytest

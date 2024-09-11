@@ -35,7 +35,7 @@ def test_to_line_segment_with_empty_points(serializer) -> None:
 
 def test_to_json(serializer) -> None:
     lines = [
-        LineSegment([
+        LineSegment(points=[
             Point(-2.8, 0.1, 0.16),
             Point(0.95, -0.12, 0.16),
             Point(4.5, -1.6, 0.16),
@@ -43,7 +43,7 @@ def test_to_json(serializer) -> None:
             Point(5.7, 2.6, 0.16),
             Point(2.9, 3.9, 0.16),
             Point(-1.4, 4.4, 0.16),
-        ])]
+        ], indices=[])]
     line_segments = serializer.to_json(lines, 'basic.ply')
     assert line_segments['ply'] == 'basic.ply'
-    assert line_segments['indices'] == None
+    assert line_segments['lines'][0]['line_indices'] == []

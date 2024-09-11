@@ -1,9 +1,9 @@
 [
   {
-    "indices": null,
     "lines": [
       {
-        "points": []
+        "points": [],
+        "line_indices": []
       }
     ],
     "ply": "basic.ply"

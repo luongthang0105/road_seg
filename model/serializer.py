@@ -1,8 +1,15 @@
-import json
 from model.line_segment import LineSegment
-from model.ply import Ply, Line
 from model.point import Point
 import jsons
+
+
+class Solution:
+    ply: str
+    lines: list[LineSegment]
+
+    def __init__(self, ply: str, lines: list[LineSegment]) -> None:
+        self.ply = ply
+        self.lines = lines
 
 
 class Serializer:
@@ -17,41 +24,43 @@ class Serializer:
                 for point in line.points:
                     points = Point(x=point.x, y=point.y, z=point.z)
                     line_points.append(points)
-                all_lines.append(Line(points=line_points))
+                all_lines.append(LineSegment(
+                    points=line_points, indices=line.line_indices))
 
-        solution = Ply(ply=problem_name, lines=all_lines)
+        solution = Solution(ply=problem_name, lines=all_lines)
         return jsons.dump(solution)
 
-    def to_line_segment(self, ply_data: list) -> list[dict[str, list[LineSegment]]]:
+    def to_line_segment(self, solutions: list[dict]) -> list[dict[str, list[LineSegment]]]:
         """
         Convert all the line segments of JSON format and points in Ply class data.
         It returns a dictionary with the file name. For example: {'basic.ply', list[LineSegment])}
         """
-        ply_list = []
+        solution_list = []
 
-        for ply in ply_data:
-            ply_object = Ply(**ply)
-            empty_lines = [{ply_object.ply: []}]
-            empty_points = [{ply_object.ply: [LineSegment([])]}]
+        for solution in solutions:
+            solution_object = Solution(**solution)
+            empty_lines = [{solution_object.ply: []}]
+            empty_points = [{solution_object.ply: [LineSegment([])]}]
             all_lines = []
 
-            if ply_object.lines is None or len(ply_object.lines) == 0:
+            if solution_object.lines is None or len(solution_object.lines) == 0:
                 return empty_lines
 
-            for line in ply_object.lines:
+            for line in solution_object.lines:
                 all_points = []
 
-                if line['points'] is None or len(line['points']) == 0:
+                if line.get('points') is None or len(line.get('points')) == 0:
                     return empty_points
 
-                for point in line['points']:
-                    new_point = Point(x=point.get(
-                        'x'), y=point.get('y'), z=point.get('z'))
+                for point in line.get('points'):
+                    new_point = Point(
+                        x=point.get('x'), y=point.get('y'), z=point.get('z'))
                     all_points.append(new_point)
 
-                line_segment = LineSegment(points=all_points)
+                line_segment = LineSegment(
+                    points=all_points, indices=line.get('line_indices'))
                 all_lines.append(line_segment)
-            _line = {ply_object.ply: all_lines}
-            ply_list.append(_line)
+            _line = {solution_object.ply: all_lines}
+            solution_list.append(_line)
 
-        return ply_list
+        return solution_list

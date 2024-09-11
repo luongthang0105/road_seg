@@ -6,11 +6,12 @@ from texttable import Texttable
 
 
 class Grader:
-    def __init__(self, evaluator_type: LineSegmentEvaluator) -> None:
+    def __init__(self, evaluator_type: LineSegmentEvaluator, ideal_solution_path: str, predicted_solution_path: str) -> None:
         self.evalutor = evaluator_type
-        pass
+        self.ideal_solution_path = ideal_solution_path
+        self.predicted_solution_path = predicted_solution_path
 
-    def load_json(self, path: str):
+    def _load_json(self, path: str):
         try:
             with open(path, 'r') as f:
                 data = json.load(f)
@@ -18,24 +19,26 @@ class Grader:
         except Exception as e:
             raise e
 
-    def calculate_distances(self, ideal_solutions: list[dict], solutions: list[dict]) -> None:
+    def calculate_distances(self) -> None:
         serializer = Serializer()
-        ideal_line_segments = serializer.to_line_segment(ideal_solutions)
-        solution_line_segments = serializer.to_line_segment(solutions)
+        ideal_line_segments = serializer.to_line_segment(
+            self._load_json(self.ideal_solution_path))
+        solution_line_segments = serializer.to_line_segment(
+            self._load_json(self.predicted_solution_path))
         all_min_distances = []
         t = Texttable()
         t.add_row(['Problem Name', 'Line No', 'Minimum Distance'])
 
         for solution in solution_line_segments:
-            for attr, value in enumerate(solution.items()):
+            for key, value in solution.items():
 
-                file_name = value[0]
-                submission_line_seg = value[1]
+                file_name = key
+                submission_line_seg = value
 
                 ideal_solution_line_seg = self._find_solution_in_ideal(
                     ideal_line_segments, file_name)
 
-                if ideal_solution_line_seg is None or not submission_line_seg:
+                if not ideal_solution_line_seg or not submission_line_seg:
                     continue
 
                 for index, ideal_line in enumerate(ideal_solution_line_seg):

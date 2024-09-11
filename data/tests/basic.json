@@ -1,6 +1,5 @@
 [
   {
-    "indices": null,
     "lines": [
       {
         "points": [
@@ -18,7 +17,8 @@
             "y": -3.429015,
             "z": 1.5802343
           }
-        ]
+        ],
+        "line_indices": []
       }
     ],
     "ply": "basic.ply"

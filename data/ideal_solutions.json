@@ -1,8 +1,8 @@
 [
   {
-    "indices": null,
     "lines": [
       {
+        "line_indices": null,
         "points": [
           {
             "intensity": 0.0,
@@ -59,7 +59,6 @@
     "ply": "basic.ply"
   },
   {
-    "indices": null,
     "lines": [
       {
         "points": [
@@ -224,13 +223,13 @@
             "y": -5.2752657,
             "z": 0.24535722
           }
-        ]
+        ],
+        "line_indices": null
       }
     ],
     "ply": "bendy.ply"
   },
   {
-    "indices": null,
     "lines": [
       {
         "points": [
@@ -248,7 +247,8 @@
             "y": -11.888248,
             "z": 0.73499984
           }
-        ]
+        ],
+        "line_indices": null
       },
       {
         "points": [
@@ -266,7 +266,8 @@
             "y": 12.630835,
             "z": 0.7349999
           }
-        ]
+        ],
+        "line_indices": null
       },
       {
         "points": [
@@ -284,7 +285,8 @@
             "y": 13.37179,
             "z": 0.7349999
           }
-        ]
+        ],
+        "line_indices": null
       },
       {
         "points": [
@@ -302,13 +304,13 @@
             "y": -0.018881246,
             "z": 0.7349999
           }
-        ]
+        ],
+        "line_indices": null
       }
     ],
     "ply": "90_degree_turn.ply"
   },
   {
-    "indices": null,
     "lines": [
       {
         "points": [
@@ -396,13 +398,13 @@
             "y": 5.776991,
             "z": 0.9583453
           }
-        ]
+        ],
+        "line_indices": null
       }
     ],
     "ply": "circular.ply"
   },
   {
-    "indices": null,
     "lines": [
       {
         "points": [
@@ -441,7 +443,8 @@
             "y": 6.999972,
             "z": 1.2800536
           }
-        ]
+        ],
+        "line_indices": null
       },
       {
         "points": [
@@ -480,13 +483,13 @@
             "y": 5.151673,
             "z": 1.2800536
           }
-        ]
+        ],
+        "line_indices": null
       }
     ],
     "ply": "highway.ply"
   },
   {
-    "indices": null,
     "lines": [
       {
         "points": [
@@ -518,7 +521,8 @@
             "y": -7.118643,
             "z": 2.2433639
           }
-        ]
+        ],
+        "line_indices": null
       },
       {
         "points": [
@@ -550,13 +554,13 @@
             "y": -4.702717,
             "z": 2.2433639
           }
-        ]
+        ],
+        "line_indices": null
       }
     ],
     "ply": "intersection.ply"
   },
   {
-    "indices": null,
     "lines": [
       {
         "points": [
@@ -574,7 +578,8 @@
             "y": 4.038242,
             "z": 0.38996536
           }
-        ]
+        ],
+        "line_indices": null
       },
       {
         "points": [
@@ -599,7 +604,8 @@
             "y": 3.52421,
             "z": 0.28225195
           }
-        ]
+        ],
+        "line_indices": null
       },
       {
         "points": [
@@ -624,7 +630,8 @@
             "y": -6.052896,
             "z": 0.38061902
           }
-        ]
+        ],
+        "line_indices": null
       },
       {
         "points": [
@@ -670,13 +677,13 @@
             "y": 0.8612928,
             "z": 0.48560125
           }
-        ]
+        ],
+        "line_indices": null
       }
     ],
     "ply": "roundabout.ply"
   },
   {
-    "indices": null,
     "lines": [
       {
         "points": [
@@ -694,7 +701,8 @@
             "y": -3.429015,
             "z": 1.5802343
           }
-        ]
+        ],
+        "line_indices": null
       },
       {
         "points": [
@@ -712,7 +720,8 @@
             "y": -3.5829177,
             "z": 1.6040596
           }
-        ]
+        ],
+        "line_indices": null
       }
     ],
     "ply": "straight_road.ply"
