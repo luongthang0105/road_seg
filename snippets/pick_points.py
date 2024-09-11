@@ -1,12 +1,11 @@
 import open3d as o3d
 import numpy as np
 import json
-from model.ply import Ply
-file_path = "straight_road.ply"
+file_path = "basic.ply"
 
 pc = o3d.io.read_point_cloud(f"./data/{file_path}")
 
-response: Ply = {
+response = {
     "indices": None,
     "lines": [],
     "ply": file_path

@@ -9,10 +9,8 @@ class Grader:
     def __init__(self, evaluator_type: LineSegmentEvaluator, ideal_solution_path: str, predicted_solution_path: str) -> None:
         self.evalutor = evaluator_type
         serializer = Serializer()
-        ideal_line_segments = serializer.to_line_segment(
-            self._load_json(ideal_solution_path))
-        solution_line_segments = serializer.to_line_segment(
-            self._load_json(predicted_solution_path))
+        ideal_line_segments: list[dict[str, list[LineSegment]]] = serializer.to_line_segment(self._load_json(ideal_solution_path))
+        solution_line_segments: list[dict[str, list[LineSegment]]] = serializer.to_line_segment(self._load_json(predicted_solution_path))
         self.calculate_distances(ideal_line_segments, solution_line_segments)
 
     def _load_json(self, path: str):
@@ -23,7 +21,10 @@ class Grader:
         except Exception as e:
             raise e
 
-    def calculate_distances(self, ideal_line_segments: list[dict[str, list[LineSegment]]], solution_line_segments: list[dict[str, list[LineSegment]]]) -> None:
+    def calculate_distances(self,
+                            ideal_line_segments: list[dict[str, list[LineSegment]]],
+                            solution_line_segments: list[dict[str, list[LineSegment]]]) -> None:
+        
         all_min_distances = []
         t = Texttable()
         t.add_row(["Problem Name", "Line No", "Minimum Distance"])
@@ -56,6 +57,10 @@ class Grader:
         print(t.draw())
 
     def _find_solution_in_ideal(self, ideal_lines: list[dict[str, list[LineSegment]]], problem_name: str) -> list[LineSegment] | None:
+        """
+        This methods finds the ideal line in the list of 'ideal_lines' of the given 'problem_name'.
+        If problem name is found in 'ideal_lines' it will return list otherwise None
+        """
         lines = None
         for line in ideal_lines:
             if isinstance(line, dict) and problem_name in line.keys():
