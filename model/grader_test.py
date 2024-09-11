@@ -19,8 +19,9 @@ def ideal_lines():
 
 
 def test_load_json():
-    frachet = FrechetLineSegmentEvaluator()
-    grader = Grader(frachet, "./data/tests/ideal_solutions.json", "")
+    frechet = FrechetLineSegmentEvaluator()
+    grader = Grader(frechet, "./data/tests/ideal_solutions.json",
+                    "./data/tests/basic.json")
     ideal_lines = grader._load_json("./data/tests/ideal_solutions.json")
     assert len(ideal_lines) == 1
     assert len(ideal_lines[0]["lines"]) == 4
@@ -28,23 +29,26 @@ def test_load_json():
 
 
 def test_load_json_invalid_path():
-    frachet = FrechetLineSegmentEvaluator()
-    grader = Grader(frachet, "", "")
+    frechet = FrechetLineSegmentEvaluator()
+    grader = Grader(frechet, "./data/tests/ideal_solutions.json",
+                    "./data/tests/basic.json")
     with pytest.raises(Exception) as exc_info:
         grader._load_json("/my/invalid/path/ideal_solutions.json")
     assert "No such file or directory" in str(exc_info.value)
 
 
 def test_find_solution_in_ideal(ideal_lines):
-    frachet = FrechetLineSegmentEvaluator()
-    grader = Grader(frachet, "", "")
+    frechet = FrechetLineSegmentEvaluator()
+    grader = Grader(frechet, "./data/tests/ideal_solutions.json",
+                    "./data/tests/basic.json")
     lines = grader._find_solution_in_ideal(ideal_lines, "basic.ply")
     assert len(lines) == 1
     assert type(lines) == list
 
 
 def test_find_solution_in_ideal_not_found(ideal_lines):
-    frachet = FrechetLineSegmentEvaluator()
-    grader = Grader(frachet, "", "")
+    frechet = FrechetLineSegmentEvaluator()
+    grader = Grader(frechet, "./data/tests/ideal_solutions.json",
+                    "./data/tests/basic.json")
     lines = grader._find_solution_in_ideal(ideal_lines, "basic_not_found.ply")
     assert lines == None

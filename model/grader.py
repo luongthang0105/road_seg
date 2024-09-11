@@ -8,8 +8,12 @@ from texttable import Texttable
 class Grader:
     def __init__(self, evaluator_type: LineSegmentEvaluator, ideal_solution_path: str, predicted_solution_path: str) -> None:
         self.evalutor = evaluator_type
-        self.ideal_solution_path = ideal_solution_path
-        self.predicted_solution_path = predicted_solution_path
+        serializer = Serializer()
+        ideal_line_segments = serializer.to_line_segment(
+            self._load_json(ideal_solution_path))
+        solution_line_segments = serializer.to_line_segment(
+            self._load_json(predicted_solution_path))
+        self.calculate_distances(ideal_line_segments, solution_line_segments)
 
     def _load_json(self, path: str):
         try:
@@ -19,12 +23,7 @@ class Grader:
         except Exception as e:
             raise e
 
-    def calculate_distances(self) -> None:
-        serializer = Serializer()
-        ideal_line_segments = serializer.to_line_segment(
-            self._load_json(self.ideal_solution_path))
-        solution_line_segments = serializer.to_line_segment(
-            self._load_json(self.predicted_solution_path))
+    def calculate_distances(self, ideal_line_segments: list[dict[str, list[LineSegment]]], solution_line_segments: list[dict[str, list[LineSegment]]]) -> None:
         all_min_distances = []
         t = Texttable()
         t.add_row(["Problem Name", "Line No", "Minimum Distance"])
