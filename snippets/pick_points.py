@@ -51,12 +51,12 @@ while True:
     line_data = {"points": data}
     response["lines"].append(line_data)
 
-    with open('./data/basic_solution.json', 'w') as f:
+    with open("./data/basic_solution.json", "w") as f:
         json.dump(response, f, indent=4)
 
     print("Press 'Enter' to pick another line or 'Q' to quit.")
     user_input = input()
-    if user_input.lower() == 'q':
+    if user_input.lower() == "q":
         break
 
 print("All lines saved to basic_solution.json.")

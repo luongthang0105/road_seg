@@ -13,7 +13,7 @@ class Grader:
 
     def _load_json(self, path: str):
         try:
-            with open(path, 'r') as f:
+            with open(path, "r") as f:
                 data = json.load(f)
             return data
         except Exception as e:
@@ -27,7 +27,7 @@ class Grader:
             self._load_json(self.predicted_solution_path))
         all_min_distances = []
         t = Texttable()
-        t.add_row(['Problem Name', 'Line No', 'Minimum Distance'])
+        t.add_row(["Problem Name", "Line No", "Minimum Distance"])
 
         for solution in solution_line_segments:
             for key, value in solution.items():
@@ -53,7 +53,7 @@ class Grader:
                         t.add_row([file_name, index, min_distance])
                         all_min_distances.append(min_distance)
 
-        t.add_row(['Total', '', sum(all_min_distances)])
+        t.add_row(["Total", "", sum(all_min_distances)])
         print(t.draw())
 
     def _find_solution_in_ideal(self, ideal_lines: list[dict[str, list[LineSegment]]], problem_name: str) -> list[LineSegment] | None:

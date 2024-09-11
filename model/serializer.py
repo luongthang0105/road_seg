@@ -33,7 +33,7 @@ class Serializer:
     def to_line_segment(self, solutions: list[dict]) -> list[dict[str, list[LineSegment]]]:
         """
         Convert all the line segments of JSON format and points in Ply class data.
-        It returns a dictionary with the file name. For example: {'basic.ply', list[LineSegment])}
+        It returns a dictionary with the file name. For example: {"basic.ply", list[LineSegment])}
         """
         solution_list = []
 
@@ -49,16 +49,16 @@ class Serializer:
             for line in solution_object.lines:
                 all_points = []
 
-                if line.get('points') is None or len(line.get('points')) == 0:
+                if line.get("points") is None or len(line.get("points")) == 0:
                     return empty_points
 
-                for point in line.get('points'):
+                for point in line.get("points"):
                     new_point = Point(
-                        x=point.get('x'), y=point.get('y'), z=point.get('z'))
+                        x=point.get("x"), y=point.get("y"), z=point.get("z"))
                     all_points.append(new_point)
 
                 line_segment = LineSegment(
-                    points=all_points, indices=line.get('line_indices'))
+                    points=all_points, indices=line.get("line_indices"))
                 all_lines.append(line_segment)
             _line = {solution_object.ply: all_lines}
             solution_list.append(_line)
