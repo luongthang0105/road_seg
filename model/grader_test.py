@@ -3,10 +3,11 @@ from evaluators.frechet import FrechetLineSegmentEvaluator
 from model.line_segment import LineSegment
 from model.point import Point
 import pytest
+from texttable import Texttable
 
 
 @pytest.fixture
-def ideal_lines() -> list[dict]:
+def ideal_lines() -> list[dict[str, LineSegment]]:
     return [{"basic.ply": [LineSegment([
         Point(-2.8, 0.1, 0.16),
         Point(0.95, -0.12, 0.16),
@@ -37,7 +38,7 @@ def test_load_json_invalid_path() -> None:
     assert "No such file or directory" in str(exc_info.value)
 
 
-def test_find_solution_in_ideal(ideal_lines) -> None:
+def test_find_solution_in_ideal(ideal_lines: list[dict[str, LineSegment]]) -> None:
     frechet = FrechetLineSegmentEvaluator()
     grader = Grader(frechet, "./data/tests/ideal_solutions.json",
                     "./data/tests/basic.json")
@@ -46,9 +47,78 @@ def test_find_solution_in_ideal(ideal_lines) -> None:
     assert type(lines) == list
 
 
-def test_find_solution_in_ideal_not_found(ideal_lines) -> None:
+def test_find_solution_in_ideal_not_found(ideal_lines: list[dict[str, LineSegment]]) -> None:
     frechet = FrechetLineSegmentEvaluator()
     grader = Grader(frechet, "./data/tests/ideal_solutions.json",
                     "./data/tests/basic.json")
     lines = grader._find_solution_in_ideal(ideal_lines, "basic_not_found.ply")
-    assert lines == None
+    assert lines == []
+
+
+def test_find_matching_lines() -> None:
+    frechet = FrechetLineSegmentEvaluator()
+    grader = Grader(frechet, "./data/tests/ideal_solutions.json",
+                    "./data/tests/roundabout.json")
+    distance = grader._find_matching_lines(
+        grader.ideal_line_segments[0]['roundabout.ply'][0], grader.solution_line_segments[0]['roundabout.ply'])
+    assert len(distance) == 4
+    assert distance[0] == pytest.approx(33.5, rel=1e-2)
+
+
+def test_find_matching_lines_invalid_input() -> None:
+    frechet = FrechetLineSegmentEvaluator()
+    grader = Grader(frechet, "./data/tests/ideal_solutions.json",
+                    "./data/tests/roundabout.json")
+    distance = grader._find_matching_lines(
+        "invalid_string_instead_of_line_segment", "invalid_string_instead_of_line_segment")
+    assert len(distance) == 0
+    assert distance == []
+
+
+def test_calculate_ideal_and_predicted_distances() -> None:
+    frechet = FrechetLineSegmentEvaluator()
+    grader = Grader(frechet, "./data/tests/ideal_solutions.json",
+                    "./data/tests/roundabout.json")
+    min_distances = grader._calculate_ideal_and_predicted_distances(
+        "roundabout.ply", grader.ideal_line_segments[0]['roundabout.ply'], grader.solution_line_segments[0]['roundabout.ply'], Texttable())
+    assert min_distances[1] == pytest.approx(27.0, rel=1e2)
+
+
+def test_calculate_ideal_and_predicted_distances_empty_ideal_solution_list() -> None:
+    frechet = FrechetLineSegmentEvaluator()
+    grader = Grader(frechet, "./data/tests/ideal_solutions.json",
+                    "./data/tests/roundabout.json")
+    min_distances = grader._calculate_ideal_and_predicted_distances(
+        "roundabout.ply", [], grader.solution_line_segments[0]['roundabout.ply'], Texttable())
+    assert len(min_distances) == 0
+    assert min_distances == []
+
+
+def test_calculate_ideal_and_predicted_distances_empty_predicted_solution_list() -> None:
+    frechet = FrechetLineSegmentEvaluator()
+    grader = Grader(frechet, "./data/tests/ideal_solutions.json",
+                    "./data/tests/roundabout.json")
+    min_distances = grader._calculate_ideal_and_predicted_distances(
+        "roundabout.ply", grader.solution_line_segments[0]['roundabout.ply'], [], Texttable())
+    assert len(min_distances) == 0
+    assert min_distances == []
+
+
+def test_calculate_ideal_and_predicted_distances_empty_all_empty_lists() -> None:
+    frechet = FrechetLineSegmentEvaluator()
+    grader = Grader(frechet, "./data/tests/ideal_solutions.json",
+                    "./data/tests/roundabout.json")
+    min_distances = grader._calculate_ideal_and_predicted_distances(
+        "roundabout.ply", [], [], Texttable())
+    assert len(min_distances) == 0
+    assert min_distances == []
+
+
+def test_calculate_ideal_and_predicted_distances_invalid_data() -> None:
+    frechet = FrechetLineSegmentEvaluator()
+    grader = Grader(frechet, "./data/tests/ideal_solutions.json",
+                    "./data/tests/roundabout.json")
+    min_distances = grader._calculate_ideal_and_predicted_distances(
+        "roundabout.ply", "InvalidStringInsteadOfList", "InvalidStringInsteadOfList", Texttable())
+    assert len(min_distances) == 0
+    assert min_distances == []

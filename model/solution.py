@@ -6,8 +6,8 @@ import json
 class Solution:
 
     def __init__(self, output_file: str) -> None:
-        self.output_file = output_file
-        self.solutions = []
+        self.output_file: str = output_file
+        self.solutions: list[dict] = []
         self.serializer = Serializer()
         pass
 
