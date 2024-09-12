@@ -20,6 +20,8 @@ numpy = "^1.26.4"
 pyyaml = "^6.0.2"
 tqdm = "^4.66.5"
 pyquaternion = "^0.9.9"
+jsons = "^1.6.3"
+texttable = "^1.7.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.0"
