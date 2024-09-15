@@ -1,61 +1,69 @@
-from model.point import Point
+from model.point import Point, PointList
+import numpy as np
 # Going to assume there's only 2 sets of RGBa values. Modify this function if there are more.
 
 
-def parse_ply_file(file_path: str) -> list[Point]:
-    # Initialize empty arrays for points
-    points: list[Point] = []
-
-    # Read the file
-    with open(file_path, "r") as file:
-        lines = file.read().strip().split("\n")
-
+def parse_ply_point_list(data) -> PointList:
+    lines = data.strip().split("\n")
     header_end_index = 0
+    num_props = 0
+    points_start = 0
+    num_points = None
+    current_element = None
     for i, line in enumerate(lines):
-        if line.startswith("end_header"):
+        if line.startswith("element "):
+            components = line.split(" ")
+            current_element = components[1]
+            n = int(components[2])
+            if current_element == "vertex":
+                num_points = n
+            elif num_points is None:
+                points_start += n
+        elif line.startswith("property") and current_element == "vertex":
+            num_props += 1
+        elif line.startswith("end_header"):
             header_end_index = i
             break
-    has_color = any(attr in headers for attr in [
-                    "road_colour_a", "ground_colour_a"] for headers in lines[:header_end_index])
 
+    if num_points is None:
+        raise ValueError("Malformed ply, no 'vertex' attribute detected")
+    has_color = any(
+        attr in headers
+        for attr in ["road_colour_a", "ground_colour_a"]
+        for headers in lines[:header_end_index]
+    )
+
+    if has_color:
+        num_features = 7
+    else:
+        num_features = 3
+
+    assert num_props >= num_features
     # Parse the lines starting from the 15th line
-    from_line = header_end_index + 1
-    for line in lines[from_line:]:
-        # Split the line by whitespace
-        values = line.split()
+    from_line = header_end_index + points_start + 1
+    joined = " ".join(lines[from_line : from_line + num_points])
+    values = np.fromstring(joined, dtype=np.float32, sep=" ").reshape(-1, num_props)
 
-        # Extract the x, y, z coordinates
-        x = float(values[0])
-        y = float(values[1])
-        z = float(values[2])
+    # Extract the x, y, z coordinates
+    point_data = values[:, :3]
+    if has_color:
+        rgbi = np.where(values[:, 4:8] != np.zeros(4), values[:, 4:8], values[:, 10:14])
+        point_data = np.concatenate((point_data, rgbi), axis=1)
 
-        # Default values for color and intensity
-        colour: list[float] = []
-        intensity: float = 0
-        if has_color:
-            # Extract the first set of RGBa color values
-            r1 = float(values[4])
-            g1 = float(values[5])
-            b1 = float(values[6])
-            i1 = float(values[7])
+    return PointList(np.array(point_data).reshape(-1, num_features))
 
-            # skip UV_x and UV_y
 
-            r2 = float(values[10])
-            g2 = float(values[11])
-            b2 = float(values[12])
-            i2 = float(values[13])
+def parse_ply_file_point_list(file_path: str) -> PointList:
+    # Read the file
+    with open(file_path, "r") as file:
+        data = file.read()
 
-            # data isn't clean, it stores colour values for road and ground in the same line, extract non 0 ones.
-            if r1 == 0 and g1 == 0 and b1 == 0 and i1 == 0:
-                colour = [r2, g2, b2]
-                intensity = i2
-            else:
-                colour = [r1, g1, b1]
-                intensity = i1
-        # Create a Point object and append it to the points array
-        point = Point(x, y, z)
-        if len(colour) > 0 and intensity != 0:
-            point = Point(x, y, z, colour, intensity)
-        points.append(point)
+    return parse_ply_point_list(data)
+
+
+def parse_ply_file(file_path: str) -> list[Point]:
+    point_list: PointList = parse_ply_file_point_list(file_path)
+    points: list[Point] = []
+    for i in range(len(point_list)):
+        points.append(point_list.get(i))
     return points
