@@ -1,6 +1,10 @@
+import sys
 import open3d.visualization as viz
 import open3d as o3d
 
+model = "./data/basic.ply"
+if len(sys.argv) > 1:
+    model = sys.argv[1]
 
 def visualize_point_cloud(pc) -> None:
     v = viz.Visualizer()
@@ -18,5 +22,5 @@ def visualize_point_cloud(pc) -> None:
     v.destroy_window()
 
 
-pc = o3d.io.read_point_cloud("./data/basic.ply")
+pc = o3d.io.read_point_cloud(model)
 visualize_point_cloud(pc)
