@@ -1,14 +1,19 @@
 import open3d as o3d
-from model.point import Point
+from model.point import Point, PointList
 import numpy as np
 from model.reduction_strategy import PointCloudReductionStrategy as ReductionStrategy
 
-def create_point_cloud(points: list[Point]) -> o3d.geometry.PointCloud:
+def create_point_cloud(points: PointList | list[Point]) -> o3d.geometry.PointCloud:
     point_cloud = o3d.geometry.PointCloud()
-    point_cloud.points = o3d.utility.Vector3dVector(
-        [[point.x, point.y, point.z] for point in points]
-    )
-    point_cloud.colors = o3d.utility.Vector3dVector([point.rgb for point in points])
+    if type(points) is list:
+        point_cloud.points = o3d.utility.Vector3dVector(
+            [[point.x, point.y, point.z] for point in points]
+        )
+        point_cloud.colors = o3d.utility.Vector3dVector([point.rgb for point in points])
+    elif type(points) is PointList:
+        point_cloud.points = o3d.utility.Vector3dVector(points.xyz())
+        if points.has_rgbi():
+            point_cloud.colors = o3d.utility.Vector3dVector(points.rgb())
 
     return point_cloud
 
